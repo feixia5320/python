@@ -91,4 +91,9 @@ def read_excel():
  
 if __name__ == '__main__':
   read_excel()
+#---------------------print-------------
+#参数sep是实现分隔符，比如多个参数输出时想要输出中间的分隔字符；关键字参数end是输出结束时的字符，默认是换行符\n
+print(a,b,c.sep="\n-------\n",end = "\n")
+#替换字符串中的部分信息，生成一个list
+urls = ['Attractions-g60763-Activities-oa{}-New_York_City_New_York'.format(str(i)) for i in range(30,930,30)]
 
