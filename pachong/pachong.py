@@ -28,6 +28,7 @@ from bs4 import BeautifulSoup
 
 url = 'http://www.baidu.com'
 req = requests.get(url)
+req.encoding = 'utf-8'
 soup = BeautifulSoup(req.content, 'html.parser')
 print(soup)
 
@@ -70,4 +71,37 @@ def get_favs(url,data=None):
 for single_url in urls:
     get_favs(single_url)
 
-    
+'''
+alink    = soup.select('a')
+print(alink[0]['href'])
+'''
+#-----------将爬取的网页输出excel、数据库------------
+
+import pandas
+import sqlite3
+
+arr = [
+    {
+        "aa": "aa",
+        "bb": "bb",
+        "cc": "cc"
+    },{
+        "aa": "aa",
+        "bb": "bb",
+        "cc": "cc"
+    }
+]
+#使用pandas数据分析
+df = pandas.DataFrame(arr)
+#显示前5条数据
+df.head(5)
+#输出为excel
+# df.to_excel('aaaa.xls')
+
+with sqlite3.connect('news.sqlite') as db:
+    #写入数据库
+    df.to_sql('news', con=db)
+    #读取数据库
+    df2 = pandas.read_sql_query('SELECT * FROM news', con=db)
+    #输入出为excel
+    df2.to_excel('bbbb.xls')
