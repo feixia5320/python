@@ -105,3 +105,50 @@ with sqlite3.connect('news.sqlite') as db:
     df2 = pandas.read_sql_query('SELECT * FROM news', con=db)
     #输入出为excel
     df2.to_excel('bbbb.xls')
+
+#在数据库中创建表
+zufang  = sqlite3.connect('zufang.sqlite')
+create_table = 'create table zufang (title varchar(512), money varchar(128))'
+zufang.execute(create_table)
+
+#-----------------urllib-post-------------
+from urllib import request, parse
+url = r'http://www.lagou.com/jobs/positionAjax.json?'
+headers = {
+    'User-Agent': r'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  r'Chrome/45.0.2454.85 Safari/537.36 115Browser/6.0.3',
+    'Referer': r'http://www.lagou.com/zhaopin/Python/?labelWords=label',
+    'Connection': 'keep-alive'
+}
+data = {
+    'first': 'true',
+    'pn': 1,
+    'kd': 'Python'
+}
+data = parse.urlencode(data).encode('utf-8')
+req = request.Request(url, headers=headers, data=data)
+page = request.urlopen(req).read()
+page = page.decode('utf-8')
+
+#-----------------urllib-异常处理--------------
+def get_page(url):
+    headers = {
+        'User-Agent': r'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                    r'Chrome/45.0.2454.85 Safari/537.36 115Browser/6.0.3',
+        'Referer': r'http://www.lagou.com/zhaopin/Python/?labelWords=label',
+        'Connection': 'keep-alive'
+    }
+    data = {
+        'first': 'true',
+        'pn': 1,
+        'kd': 'Python'
+    }
+    data = parse.urlencode(data).encode('utf-8')
+    req = request.Request(url, headers=headers)
+    try:
+        page = request.urlopen(req, data=data).read()
+        page = page.decode('utf-8')
+    except error.HTTPError as e:
+        print(e.code())
+        print(e.read().decode('utf-8'))
+    return page
