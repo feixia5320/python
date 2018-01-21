@@ -152,3 +152,30 @@ def get_page(url):
         print(e.code())
         print(e.read().decode('utf-8'))
     return page
+
+#------------------媒体文件抽取-------------------
+import urllib
+import requests
+from bs4 import BeautifulSoup
+
+def Schedule(blocknum, blocksize, totalsize):
+    '''
+    :param blocknum: 已下载的数据块
+    :param blocksize: 数据块的大小
+    :param totalsize: 远程文件的大小
+    :return:
+    '''
+    per = 100.0 * blocknum * blocksize / totalsize
+    if per > 100:
+        print('当前下载进度：%d' % per)
+
+user_agent = 'Mozilla/4.0 (compatible;MSIE 5.5;Windows NT)'
+headers={'User-Agent':user_agent}
+r = requests.get("http://www.ivsky.com/",headers= headers)
+soup = BeautifulSoup(r.text,'html5lib')
+img_urls = soup.select('.syl_pic > a > img')
+i =0
+for img_url in img_urls:
+    print(img_url['src'])
+    urllib.request.urlretrieve(img_url['src'],'img'+str(i) + '.jpg',Schedule)
+    i+=1
